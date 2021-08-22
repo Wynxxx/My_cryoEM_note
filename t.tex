@@ -1,0 +1,415 @@
+\documentclass{article}
+
+\author{Yining Wang}
+\title { \LARGE \bf Understanding of cryo-EM: \\ \bf  Image formation and 3D reconstruction\\ \normalsize written by \LaTeX{} }
+
+\usepackage{graphicx}
+\usepackage[colorlinks, linkcolor = black]{hyperref}
+\usepackage{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{framed}
+\usepackage{bookmark}
+\usepackage{geometry}
+
+\geometry{a4paper,scale=0.75}
+
+
+
+
+\begin{document}
+
+    \maketitle
+    \thispagestyle{empty}
+    \begin{figure}[h]
+        \centering   
+        \includegraphics[scale = 0.17]{/Users/yiningwang/Desktop/HMWGS.PNG} 
+    \end{figure}
+
+   
+    \newpage
+    \tableofcontents
+
+
+    \newpage
+    \thispagestyle{empty}
+    \begin{figure}[p]
+        \centering
+        \includegraphics[scale = 0.09]{/Users/yiningwang/Desktop/HMWGS.PNG} 
+        \caption{\small HMW-GS predicted by AlphaFold(Pipeline)}
+    \end{figure}
+    \begin{figure}[p]
+        \centering
+        \includegraphics[scale = 0.09]{/Users/yiningwang/Desktop/AlphaFold/pics/LMW.png} 
+        \caption{\small LMW-GS predicted by AlphaFold(Colab version)}
+    \end{figure}
+    \begin{figure}[p]
+        \centering
+        \includegraphics[scale = 0.09]{/Users/yiningwang/Desktop/AlphaFold/pics/gli.png} 
+        \caption{\small Gliadin predicted by AlphaFold(Colab version)}
+    \end{figure}
+    
+    \newpage
+
+
+
+
+    \begin{abstract}
+        \bf This one is a brief summary of my two-month internship at IGDB of Chinese Acadamy of Science
+        It is a great experience and I really apperatiate the opportunity to learn some the cutting-edge
+        technology like cryo eletron microscope and other bioinfomatic techniques \\
+        Other techniques when applying cryo-EM are relatively easier to understand so in this note I laid more importance on 
+        those parts which are more obscure.\\ In other words, this note states mostly about the theoratical part about 
+        image formation and the basic operation of cryo-EM\\After all, the whole process of this study will last
+        for a long period of time, hopefully we can get a good result.
+
+    \end{abstract}
+    %\thispagestyle{}
+    \newpage
+
+    \section{cryo-EM versus Negative-staining EM}
+
+    $\blacktriangleright $ Using Negative-staining EM to get a initial model and then using cryo-EM to 
+    REFINE the model\\
+    $\blacktriangleright $ Not all structures need initial model!(symmetric or high-quality enough or in a nice shape!)\\
+    $\blacktriangleright $ The sample preparation process is much easier using ns-EM
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[scale = 1]{/Users/yiningwang/Desktop/ns.png} 
+        \caption{\small Negative-staining EM}
+    \end{figure}
+
+    
+    \section{Evaluation Criteria during structure anlysis using cryo-EM}
+    \subsection{Protein preparation}
+    \begin{itemize}
+        \item Composition
+        \item \bf Purity and homogenity
+        \item \bf Stability (buffer composition)
+        \item Biochemical activity
+    \end{itemize}
+    
+    \subsection{Negative staining}
+    \begin{itemize}
+        \item Discrate particle
+        \item Stability
+        \item  \bf Particle size and particle shape
+    \end{itemize}
+    \subsection{Diagnostic cryo-EM}
+    \begin{itemize}
+        \item Stability
+        \item Particle size and shape
+        \item \bf concentration and particle distribution
+    \end{itemize}
+    \subsection{Initial cryo-EM data collection}
+    \begin{itemize}
+        \item \bf High-resolution 2D classes
+        \item Initial 3D model 
+        \item Orientation and distribution
+        \item Particle yield
+    \end{itemize}
+    \subsection{High-resolution cryo-EM data collection}
+    \begin{itemize}
+        \item Tilt pairs
+        \item Motion statistics
+        \item Angular accuracy
+        \item Conformational states
+    \end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    \section{Image processing and 3-D reconstruction}
+
+    \subsection{Fourier Transform}
+
+    \subsubsection{Fourier Transform}
+    \begin{figure}[ht]
+        \centering   
+        \includegraphics[scale = 0.3]{/Users/yiningwang/Desktop/3.png} 
+        \caption{\small Fourier transform}
+    \end{figure}
+    Fourier Transform allows us to describe a specific real-space matter in the frequency domain 
+    It answer the question that how do the density values of each point in space overlay. Hence it give
+     us a new angle to understand familiar substance.
+    Composition of different spatial frequencies forms a image
+    real space $\leftrightarrows $ reciprocal space
+    There are two main information convied by a WAVE :Amplitude($\mathcal{A} $) and Phase shift($\varphi$), and through a fourier Transform
+    these two element could be linked.\\
+    \begin{center}
+        \begin{framed}
+            $F = \left\lvert A\right\rvert \cdot e^{i\varphi_F} $  
+        \end{framed}
+    \end{center}
+    The process of image formation is a process of FOURIER TRANSFORM !
+    \subsubsection{Nyquist Frequency}
+    The highest frequency information in the image, The magnitude of the change cannot exceed the size of one pixel.
+    If the size of a pixel is 2Å, as a result the smallest wavelength can be described is 4Å. For example, if we want to get a resolution of 1 $angstrom$
+     the pixel size needed is 0.5 $angstrom$
+     
+    \subsubsection{Convolution}
+    Every spot on the image becomes a Convolution kernel(CTF in this case) and then stacked together.
+    \begin{figure}[h]
+        \centering
+        \includegraphics[scale = 0.4]{/Users/yiningwang/Desktop/con1.png} 
+        \caption{\small Convolution theorem 01}
+    \end{figure}
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[scale = 0.3]{/Users/yiningwang/Desktop/con2.png} 
+        \caption{\small Convolution theorem 02}
+    \end{figure}
+    \begin{center}
+        \begin{framed}
+            $h(x) = f(x) \otimes   g(x) = \int_{\infty}^{-\infty} f(t)g(x - t) \,dx $ \\ 
+            $V(x) \otimes P(x) = Im(x)$
+        \end{framed}
+    \end{center}
+    $P(x)$:Point scatter function -- This related only to the imaging system, it has nothing to do with the sample.\\
+    The Fourier transform of the convolution of two 
+    functions is the product of their respective Fourier transforms
+    \subsection{Image filtering}
+    Take FFT $\Longrightarrow$ Multiplied by filter $\Longrightarrow$ IFT
+    \begin{itemize}
+        \item High-pass filter: Good for high resolution details
+        \item Low-pass filter: Increase contrast and SNR
+        \item Bond-pass filter: Contrast Transform Funtion 
+    \end{itemize}
+    \subsection{Centeral Section theorem and 3-D reconstruction}
+    There is an exact relationship between Fourier transform and its mathematical projection\\
+    \begin{figure}[h]
+        \centering
+        \includegraphics[scale = 0.8]{/Users/yiningwang/Desktop/2.jpg} 
+        \caption{\small Centeral Section theorem}
+    \end{figure}
+    \subsection{Common model for information restoration }
+    \begin{center}  
+         $X = PSF \otimes P_\varphi V \otimes MTF + Noise$
+    \end{center}
+    As it is shown above, the main problem for us is to solve the parameter V form X. 
+    Under our specific circumstance the function is below
+    \begin{center}
+        \begin{framed}
+            \begin{itemize}
+                \item real space:  $X = PSF \otimes P_\varphi V \otimes MTF + N$
+                \item reciprocal space: $X = CTF \cdot \hat{P_\varphi}\hat{V} \cdot MTF +\hat{N} $
+                \item $CTF = sin[\Pi \cdot \lambda \cdot \varDelta f \cdot s^2 + \frac{\pi \cdot 
+                \lambda^3 \cdot C_s \cdot s^4}{2}  ]$
+            \end{itemize}  
+           
+        \end{framed}
+    \end{center}
+    $\hat{P_\varphi}$ can be solved only when the ORENTATION can be determined!
+    \subsection{Orientation Determination}
+    Maximum likelihood \& Bayesian method
+    The common line technique and Projetion matching
+
+    \section{Single Particle Analysis: Workflow}
+    In this section, each part of the SPA will be noted carefully. Main subsections range from 
+    evaluation of the micrograph to the final 3D refinement of the model!
+    \subsection{Micrographs evaluations}
+    There are sevaral common phenomenon in this part. To make evaluation about the micrograph
+    the very first thing to get is the POWER SPECTRUM of the photo, any slight drift, astigmatism or 
+    loss of resolution can be discovered clearly. Also, if there are many THON rings, it means the ice layer
+    is way too thin, on the oppsite, if the number of rings are too low, it means you got a thick layer of ice.
+    More rings usually means that the high-resolution details of the image is great, but CAUTION , the thin layer 
+    of ice may also brings damage to the specimen.
+    \begin{figure}[h]
+        \centering   
+        \includegraphics[scale = 0.34]{/Users/yiningwang/Desktop/micro.png} 
+        \caption{\small Drift, astigmatism and loss of resolution}
+    \end{figure}
+
+    \subsection{CTF estimation of each micrograph}
+    \begin{center}
+        \begin{framed}
+            $CTF = sin[\Pi \cdot \lambda \cdot \varDelta f \cdot s^2 + \frac{\pi \cdot 
+            \lambda^3 \cdot C_s \cdot s^4}{2}]$
+        \end{framed}     
+    \end{center}
+    \subsubsection{Key factors}
+    There are few key factors which determine the Contrast Transfer Function.
+    \begin{center}
+         \begin{itemize}
+            \item Power spectrum
+            \item Microscope parameter (Kv, Cs, pixel size...)
+            \item Defocus($\varDelta f$) $\longrightarrow$ Delocalization
+        \end{itemize}  
+    \end{center}
+    \subsubsection{CTF estimation}
+    As the function shown above the main parameter in solving CTF is $\varDelta f$ and
+    Astigmatism, to solve these two items, the method used is to compare the CTF image to
+    the Thon Ring Pattern (Exhaustively), until a perfect match is complete!
+    \begin{figure}[h]
+        \centering   
+        \includegraphics[scale = 0.3]{/Users/yiningwang/Desktop/esti.png} 
+        \caption{\small CTF estimation}
+    \end{figure}
+    \subsubsection{CTF correction}
+    \begin{center}
+        \begin{framed}
+            $-1 = e^{i\pi} (180 ^{\circ} phase shift) $
+        \end{framed}     
+    \end{center}
+     CTF can be corrected by phase flipping(adding 180$^o$ to the phases) after measurement of $\varDelta f$
+     But a dataset should comprise images within an adequate range of defocus in order to recover
+     informations in zones of zero-crossing of CTF
+    
+    $\blacktriangleright $PHASE FLIPPING
+    \begin{center}
+        $X (s)=CTF(s)\cdot F(S) +N(S)$\\
+        $M(s)=CTF(s)^2 \cdot F(s) + CTF(s) \cdot N(s)$
+    \end{center}
+    $\blacktriangleright $WEINER FILTER
+    \begin{center}
+        \begin{framed}
+            $M(s)=X(s) \cdot \frac{CTF(s)}{CTF(s)^2 + {1}/{SNR} } $\\
+            $SNR=\sigma^2(F(s))/\sigma^2(N(s))$
+           [$SSNR(s)=\frac{M(s)^2-N(s)^2}{N(s)^2}$]
+
+        \end{framed}
+    \end{center}    
+    \begin{figure}[h]
+        \centering   
+        \includegraphics[scale = 0.24]{/Users/yiningwang/Desktop/spa.png} 
+        \caption[Significant effect of defocus]{\small Small variation in defocus have significant effect in High-resolution details}
+    \end{figure}
+    \subsection{Particle picking}
+    \begin{center}
+        \begin{itemize}
+           \item Manual particle selection \& Autopick
+           \item Box Size (1.5--2 time $\rightarrow $ good for FT)
+           \item cross-correlation
+       \end{itemize}  
+   \end{center}
+    \subsection{2D Image Alignment and classification}
+    \subsubsection{Aims}
+    \begin{center}
+        \begin{itemize}
+           \item clean the dataset
+           \item increase SNR to generate averaged micrographs
+           \item classification to purify particles
+       \end{itemize}  
+   \end{center}
+   \subsubsection{Methods}
+   \begin{center}
+    \begin{enumerate}
+       \item 2D Image Rotation Alignment (rotation alignment)
+       \item Maximum likelihood
+   \end{enumerate} 
+\end{center}
+
+    \subsection{Initial model problem}
+    Initial model problem plays a fundamental part in the image formation, because the following 
+    part(Projetion Mapping)
+    needs a appropriate initial model to make 3D refinement, the main methods are below:
+    \begin{center}
+        \begin{itemize}
+           \item Random Conical Tilt (Missing cone probably)
+           \item Class average and Commo line method  (Good SNR needed)
+           \item Electron Tomography and sub-tomo average
+       \end{itemize} 
+    \end{center}
+
+    \subsection{3D refinement}
+    Major methods used in 3D refinement are Projection mapping and Bayesian Method 
+    \begin{figure}[h]
+        \centering
+        \includegraphics[scale = 0.4]{/Users/yiningwang/Desktop/PM.png} 
+        \caption{\small Iterative Refinement--Projection Mapping}
+    \end{figure}
+    \subsection{Resolution assessment and map validation}
+    Once a concentration map is built, the jod to do is to make assessment of the resolution and 
+    furthermore, apply the map validation, if the resolution of the image is high enough and the side chains
+    can be determined, the validation of the map can be done easily. But we can not always get hi-resolution images
+    so the proper methods and algorithms to do resolution assessmet and map validation is needed
+    \begin{center}
+        \begin{framed}
+            $F_L \cdot {F_R}^* = \left\lvert F_L\right\rvert \left\lvert F_R\right\rvert - e^{i \cdot (\varphi_L - \varphi_R)}$
+        \end{framed}
+    \end{center}  
+    The function above is a simplified version of Fourier Shell coefficient, by using this method the resolution of the 
+    initial model can be culculated. If the resolution isn't estimated correctly, a phenomenon called over fitting
+    will come up and affect further section. 
+    PARTICLE NUMBER DOES MATTER!!!Because the number of the particles will determine Singnal-to-Noise Rate and in advance, determine the 
+    resolution, and there is a simple way to estimate the number of particle needed to reach a
+    certain resolution by using the diameter of the particle 
+    \begin{center}
+        \begin{framed}
+            Num = $\frac{\pi \cdot D}{(m) \cdot Res} \times 100\times 5$
+        \end{framed}
+    \end{center} 
+    Once the resolution assessment is done the next part is to apply map validation, one of the mainstream 
+    method is called Tilt pair Validation. 
+    \begin{figure}[p]
+        \centering
+        \includegraphics[scale = 0.4]{/Users/yiningwang/Desktop/FSC.png} 
+        \caption{\small Fourier shell coefficient}
+    \end{figure}
+    \begin{figure}[p]
+        \centering
+        \includegraphics[scale = 0.4]{/Users/yiningwang/Desktop/TPV.png} 
+        \caption{\small Tilt Pair Validation}
+    \end{figure}
+    \subsection{3D Classification}
+    Although the process stated above can be done by computer programs like RELION, it is not that easy because the 
+    exsistance of two types of heterogeneity: Composition heterogeneity and Conformational heterogeneity.
+    Because the SPA in valide under the hypothesis of all the particles are excatly SAME, so special computational 
+    strategies are needed to solve these two problems, MDA(Multivariate Date Analysis) is a prevailing one.
+    Discrete-state heterogeneity(apple/pear) is often easier to deal with than Continuous-state (green apple/light-green apple)
+    \subsubsection{Discrete-state methods}
+    \begin{center}
+        \begin{itemize}
+           \item Multireference classification
+           \item Maximum likelihood methods
+           \item Statistical Analysis methods
+       \end{itemize} 
+    \end{center}
+    \subsubsection{Continuous-state methods}
+    There is a clear relation between the possibility of a electron's apperance on certain spot and it's energy
+    \begin{center}
+        \begin{framed}
+            $P\propto e^{-\frac{E}{kT}}$
+        \end{framed}
+    \end{center} 
+    There are two methods to deal with the problem
+    \begin{center}
+        \begin{enumerate}
+           \item Hybrid EM NMA 
+           \item Manifold Embedding Method
+       \end{enumerate} 
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[scale = 0.4]{/Users/yiningwang/Desktop/HEM.png} 
+        \caption{\small HEMNMA}
+    \end{figure}
+    \end{center}
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[scale = 0.4]{/Users/yiningwang/Desktop/mem.png} 
+        \caption{\small Manifold Embedding Method}
+    \end{figure}
+   
+    
+
+
+
+    
+
+
+
+
+
+    \end{document}
